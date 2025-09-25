@@ -1,8 +1,17 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 
 const CharacterCounter = () => {
   const [text, setText] = useState("");
   const [debouncedText, setDebouncedText] = useState(text);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const el = e.target;
+    setText(el.value);
+
+    el.style.height = "auto";
+    el.style.height = el.scrollHeight + "px";
+  };
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -29,10 +38,11 @@ const CharacterCounter = () => {
       <h2 className="text-2xl font-bold mb-4">Character Counter Tool</h2>
 
       <textarea
+        ref={textareaRef}
         value={text}
-        onChange={(e) => setText(e.target.value)}
+        onChange={handleChange}
         placeholder="Start typing your text here..."
-        className="w-full h-48 border rounded-md p-3 text-base"
+        className="w-full border rounded-md p-3 text-base resize-none overflow-hidden"
       />
 
       <div className="mt-4 grid grid-cols-3 gap-4 text-center">
