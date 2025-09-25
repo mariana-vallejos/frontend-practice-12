@@ -1,5 +1,7 @@
 import { lazy, Suspense, useState } from "react";
 import "./App.css";
+import { Route, Routes } from "react-router";
+import TodoList from "./pages/TodoList";
 
 const LazyModal = lazy(() => import("./components/Modal"));
 
@@ -8,6 +10,9 @@ function App() {
 
   return (
     <>
+    <Routes>
+      <Route path="/to-do" element={<TodoList/>}/>
+    </Routes>
       <button
         className="bg-cyan-800 text-white rounded-md p-3 hover:bg-cyan-700"
         onClick={() => setOpenModal(true)}
