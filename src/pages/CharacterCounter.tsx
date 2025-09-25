@@ -1,17 +1,28 @@
-import { useMemo, useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 const CharacterCounter = () => {
   const [text, setText] = useState("");
+  const [debouncedText, setDebouncedText] = useState(text);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedText(text);
+    }, 400);
+
+    return () => clearTimeout(handler);
+  }, [text]);
 
   const { charCount, wordCount, readingTime } = useMemo(() => {
-    console.log("render"); 
+    console.log("Recalculating...");
 
-    const charCount = text.length;
-    const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+    const charCount = debouncedText.length;
+    const wordCount = debouncedText.trim()
+      ? debouncedText.trim().split(/\s+/).length
+      : 0;
     const readingTime = (wordCount / 200).toFixed(2);
 
     return { charCount, wordCount, readingTime };
-  }, [text]);
+  }, [debouncedText]);
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
