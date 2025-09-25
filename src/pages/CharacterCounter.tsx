@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 const CharacterCounter = () => {
   const [text, setText] = useState("");
 
-  const charCount = text.length;
-  const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
-  const readingTime = () => { 
-    console.log('render')
-    return (wordCount / 200).toFixed(2);}
+  const { charCount, wordCount, readingTime } = useMemo(() => {
+    console.log("render"); 
+
+    const charCount = text.length;
+    const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+    const readingTime = (wordCount / 200).toFixed(2);
+
+    return { charCount, wordCount, readingTime };
+  }, [text]);
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
@@ -31,7 +35,7 @@ const CharacterCounter = () => {
         </div>
         <div className="p-3 bg-gray-100 rounded-md">
           <h4 className="font-semibold">Reading Time</h4>
-          <p className="text-lg">{readingTime()} min</p>
+          <p className="text-lg">{readingTime} min</p>
         </div>
       </div>
     </div>
