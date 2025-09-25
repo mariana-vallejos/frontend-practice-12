@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import { FaTrash } from "react-icons/fa";
-
-const todos = [
-  { id: 1, text: "task 1", completed: false },
-  { id: 2, text: "task 2", completed: true },
-];
+import { todoReducer } from "../reducer/TodoReducer";
 
 const TodoList = () => {
+  const [todos, dispatch] = useReducer(todoReducer, []);
   const [text, setText] = useState("");
+
+  const handleAdd = () => {
+    if (text.trim() === "") return;
+    dispatch({ type: "ADD", payload: text });
+    setText("");
+  };
 
   return (
     <div className="p-6 max-w-md mx-auto">
@@ -22,7 +25,7 @@ const TodoList = () => {
           className="flex-1 border rounded-md p-2"
         />
         <button
-          onClick={() => {}}
+          onClick={handleAdd}
           className="px-4 py-2 bg-cyan-700 text-white rounded-md hover:bg-cyan-600 transition"
         >
           Add
@@ -36,7 +39,7 @@ const TodoList = () => {
             className="flex justify-between items-center p-2 shadow rounded-md"
           >
             <span
-              onClick={() => {}}
+              onClick={() => dispatch({ type: "TOGGLE", payload: todo.id })}
               className={`cursor-pointer ${
                 todo.completed ? "line-through text-gray-500" : ""
               }`}
@@ -44,7 +47,7 @@ const TodoList = () => {
               {todo.text}
             </span>
             <button
-              onClick={() => {}}
+              onClick={() => dispatch({ type: "DELETE", payload: todo.id })}
               className="text-red-600 hover:text-red-800"
             >
               <FaTrash />
